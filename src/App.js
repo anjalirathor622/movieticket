@@ -36,6 +36,7 @@ function App() {
 
         <Route path="*" element={<NoPage/>}></Route>
       </Routes>
+      
     </BrowserRouter>
   );
 }
