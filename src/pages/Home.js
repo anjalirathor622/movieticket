@@ -330,18 +330,19 @@ export default function Home() {
                             <div className="row mb-30-none justify-content-center">
                                 
                                 {//console.log('newstate---->',newState)
-                                    /*movieData && movieData.map((cv,idx,arr)=>{
+                                    movieData && movieData.map((cv,idx,arr)=>{
+                                        console.log(cv.attributes.image_thumb.data)
                                         return(
                                             <div key={idx} className="col-sm-6 col-lg-4">
                                                 <div className="movie-grid">
                                                     <div className="movie-thumb c-thumb">
                                                         <Link to="#0">
-                                                            <img src={URL+cv.attributes.image_thumb.data.attributes.url} alt="movie" />
+                                                            <img src={URL+cv?.attributes?.image_thumb?.data?.attributes?.url} alt="movie" />
                                                         </Link>
                                                     </div>
                                                     <div className="movie-content bg-one">
                                                         <h5 className="title m-0">
-                                                            <Link to="#0">{cv.attributes.name}</Link>
+                                                            <Link to="#0">{cv?.attributes?.name}</Link>
                                                         </h5>
                                                         <ul className="movie-rating-percent">
                                                             <li>
@@ -364,7 +365,7 @@ export default function Home() {
                                                 </div>
                                             </div>
                                         )
-                                    })*/
+                                    })
                                 }   
                             </div>
                         </div>
