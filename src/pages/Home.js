@@ -1,60 +1,47 @@
 //1. Import area
-import React, { useReducer } from 'react'
+import React, { useContext, useEffect, useReducer, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { REMOVE } from '../reduser/actions/action'
+import { reduserFunction } from '../reduser/reduserFunctions/reduFunc'
+import { MovieContext } from '../App'
+import axios from 'axios'
+import { URL } from '../helper/helper'
 
-let initialState = {
-    movies: [{
-        name:'Alone2',
-        image:'http://pixner.net/boleto/demo/assets/images/movie/movie01.jpg'
-    },
-    {
-        name:'Mars2',
-        image:'http://pixner.net/boleto/demo/assets/images/movie/movie02.jpg'
-    },
-    {
-        name:'Venus2',
-        image:'http://pixner.net/boleto/demo/assets/images/movie/movie03.jpg'
-    }],
-    cart:[]
-}
+//import { initialState } from '../App'
 
-const reduserFunction = (oldState = initialState, action)=>{
-    //console.log(oldState);
-    
-    //let newState =  oldState;
-    switch(action.type){
-        case 'REMOVE':
-            //console.log('hello') 
-            return{
-                ...oldState,
-                movies:[...oldState.movies.filter((cv1,idx1,arr1)=>{
-                    return (cv1.name !== action.mname)
-                })]
-            }
-            
-        case  'ADD':
-            //console.log('hiii')
-            return oldState;
-            
-        default:
-            return oldState;
-        } 
-    
-    //return oldState;
-}
-//reduserFunction()
 //2. Defination
 export default function Home() {
     //2.1 Hooks area
-    const [newState , dispatch] = useReducer(reduserFunction, initialState)
-    
-    //2.2 Function defination
+    const [pageLoad, setPageLoad] = useState(false);
+    const initialMovies = useContext(MovieContext)//useConext
+    const [newState , dispatch] = useReducer(reduserFunction, initialMovies) //useReduser
+    const [movieData,setMovieData] = useState()
 
+    //2.2 Function defination
+    useEffect(() => {
+        getMovieData()
+    },[pageLoad])
+
+    const getMovieData = ()=>{
+        axios.get(`${URL}/api/movies?populate=*`)
+        .then( (res)=> {
+        // handle success
+        setPageLoad(true)
+        console.log("api_res---->",res.data.data);
+        setMovieData(res.data.data)
+        console.log('movieData====>',movieData)
+        })
+        .catch( (error)=> {
+        // handle error
+        console.log(error);
+        })
+        .finally( ()=> {
+        // always executed
+        });
+    }
     //2.3 return statement
     return (
         <>
-        
-            
             <section className="banner-section">
                 <div className="banner-bg bg_img bg-fixed" data-background="assets/images/banner/banner01.jpg" />
                 <div className="container">
@@ -327,201 +314,202 @@ export default function Home() {
                             </div>
                         </div>
                         <div className="widget-1 widget-banner">
-                        <div className="widget-1-body">
-                            <Link to="#0">
-                                <img src="assets/images/sidebar/banner/banner02.jpg" alt="banner" />
-                            </Link>
+                            <div className="widget-1-body">
+                                <Link to="#0">
+                                    <img src="assets/images/sidebar/banner/banner02.jpg" alt="banner" />
+                                </Link>
+                            </div>
                         </div>
-                    </div>
                     </div>
                     <div className="col-lg-9">
-                    <div className="article-section padding-bottom">
-                        <div className="section-header-1">
-                            <h2 className="title">movies</h2>
-                            <Link className="view-all" to="movie-grid.html">View All</Link>
-                        </div>
-                        <div className="row mb-30-none justify-content-center">
-                            {//console.log(newState.movies)
-                                newState.movies && newState.movies.map((cv,idx,arr)=>{
-                                    return(
-                                        <div key={idx} className="col-sm-6 col-lg-4">
-                                            <div className="movie-grid">
-                                                <div className="movie-thumb c-thumb">
-                                                    <Link to="#0">
-                                                        <img src={cv.image} alt="movie" />
-                                                    </Link>
-                                                </div>
-                                                <div className="movie-content bg-one">
-                                                    <h5 className="title m-0">
-                                                        <Link to="#0">{cv.name}</Link>
-                                                    </h5>
-                                                    <ul className="movie-rating-percent">
-                                                        <li>
-                                                            <div className="thumb">
-                                                                <img src="assets/images/movie/tomato.png" alt="movie" />
-                                                            </div>
-                                                            <span className="content">88%</span>
-                                                        </li>
-                                                        <li>
-                                                            <div className="thumb">
-                                                                <img src="assets/images/movie/cake.png" alt="movie" />
-                                                            </div>
-                                                            <span className="content">88%</span>
-                                                        </li>
-                                                    </ul>
-                                                    <button className="btn btn-danger btn-xs" onClick={(e) =>{dispatch({type:'REMOVE',mname:cv.name})}}>dlt</button>
+                        <div className="article-section padding-bottom">
+                            <div className="section-header-1">
+                                <h2 className="title">movies</h2>
+                                <Link className="view-all" to="movie-grid.html">View All</Link>
+                            </div>
+                            <div className="row mb-30-none justify-content-center">
+                                
+                                {//console.log('newstate---->',newState)
+                                    /*movieData && movieData.map((cv,idx,arr)=>{
+                                        return(
+                                            <div key={idx} className="col-sm-6 col-lg-4">
+                                                <div className="movie-grid">
+                                                    <div className="movie-thumb c-thumb">
+                                                        <Link to="#0">
+                                                            <img src={URL+cv.attributes.image_thumb.data.attributes.url} alt="movie" />
+                                                        </Link>
+                                                    </div>
+                                                    <div className="movie-content bg-one">
+                                                        <h5 className="title m-0">
+                                                            <Link to="#0">{cv.attributes.name}</Link>
+                                                        </h5>
+                                                        <ul className="movie-rating-percent">
+                                                            <li>
+                                                                <div className="thumb">
+                                                                    <img src="assets/images/movie/tomato.png" alt="movie" />
+                                                                </div>
+                                                                <span className="content">88%</span>
+                                                            </li>
+                                                            <li>
+                                                                <div className="thumb">
+                                                                    <img src="assets/images/movie/cake.png" alt="movie" />
+                                                                </div>
+                                                                <span className="content">88%</span>
+                                                            </li>
+                                                        </ul>
+                                                        {
+                                                        //<button className="btn btn-danger btn-xs" onClick={(e) =>{dispatch({type:REMOVE,mname:cv.name})}}>dlt</button>
+                                                        }
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                            
-                            
-                        </div>
-                    </div>
-                    <div className="article-section padding-bottom">
-                        <div className="section-header-1">
-                        <h2 className="title">events</h2>
-                        <Link className="view-all" to="events.html">View All</Link>
-                        </div>
-                        <div className="row mb-30-none justify-content-center">
-                        <div className="col-sm-6 col-lg-4">
-                            <div className="event-grid">
-                            <div className="movie-thumb c-thumb">
-                                <Link to="#0">
-                                <img src="assets/images/event/event01.jpg" alt="event" />
-                                </Link>
-                                <div className="event-date">
-                                <h6 className="date-title">28</h6>
-                                <span>Dec</span>
-                                </div>
-                            </div>
-                            <div className="movie-content bg-one">
-                                <h5 className="title m-0">
-                                <Link to="#0">Digital Economy Conference 2020</Link>
-                                </h5>
-                                <div className="movie-rating-percent">
-                                <span>327 Montague Street</span>
-                                </div>
-                            </div>
+                                        )
+                                    })*/
+                                }   
                             </div>
                         </div>
-                        <div className="col-sm-6 col-lg-4">
-                            <div className="event-grid">
-                            <div className="movie-thumb c-thumb">
-                                <Link to="#0">
-                                <img src="assets/images/event/event02.jpg" alt="event" />
-                                </Link>
-                                <div className="event-date">
-                                <h6 className="date-title">28</h6>
-                                <span>Dec</span>
+                        <div className="article-section padding-bottom">
+                            <div className="section-header-1">
+                            <h2 className="title">events</h2>
+                            <Link className="view-all" to="events.html">View All</Link>
+                            </div>
+                            <div className="row mb-30-none justify-content-center">
+                            <div className="col-sm-6 col-lg-4">
+                                <div className="event-grid">
+                                <div className="movie-thumb c-thumb">
+                                    <Link to="#0">
+                                    <img src="assets/images/event/event01.jpg" alt="event" />
+                                    </Link>
+                                    <div className="event-date">
+                                    <h6 className="date-title">28</h6>
+                                    <span>Dec</span>
+                                    </div>
+                                </div>
+                                <div className="movie-content bg-one">
+                                    <h5 className="title m-0">
+                                    <Link to="#0">Digital Economy Conference 2020</Link>
+                                    </h5>
+                                    <div className="movie-rating-percent">
+                                    <span>327 Montague Street</span>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
-                            <div className="movie-content bg-one">
-                                <h5 className="title m-0">
-                                <Link to="#0">web design conference 2020</Link>
-                                </h5>
-                                <div className="movie-rating-percent">
-                                <span>327 Montague Street</span>
+                            <div className="col-sm-6 col-lg-4">
+                                <div className="event-grid">
+                                <div className="movie-thumb c-thumb">
+                                    <Link to="#0">
+                                    <img src="assets/images/event/event02.jpg" alt="event" />
+                                    </Link>
+                                    <div className="event-date">
+                                    <h6 className="date-title">28</h6>
+                                    <span>Dec</span>
+                                    </div>
+                                </div>
+                                <div className="movie-content bg-one">
+                                    <h5 className="title m-0">
+                                    <Link to="#0">web design conference 2020</Link>
+                                    </h5>
+                                    <div className="movie-rating-percent">
+                                    <span>327 Montague Street</span>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
-                            </div>
-                        </div>
-                        <div className="col-sm-6 col-lg-4">
-                            <div className="event-grid">
-                            <div className="movie-thumb c-thumb">
-                                <Link to="#0">
-                                <img src="assets/images/event/event03.jpg" alt="event" />
-                                </Link>
-                                <div className="event-date">
-                                <h6 className="date-title">28</h6>
-                                <span>Dec</span>
+                            <div className="col-sm-6 col-lg-4">
+                                <div className="event-grid">
+                                <div className="movie-thumb c-thumb">
+                                    <Link to="#0">
+                                    <img src="assets/images/event/event03.jpg" alt="event" />
+                                    </Link>
+                                    <div className="event-date">
+                                    <h6 className="date-title">28</h6>
+                                    <span>Dec</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="movie-content bg-one">
-                                <h5 className="title m-0">
-                                <Link to="#0">digital thinkers meetup</Link>
-                                </h5>
-                                <div className="movie-rating-percent">
-                                <span>327 Montague Street</span>
+                                <div className="movie-content bg-one">
+                                    <h5 className="title m-0">
+                                    <Link to="#0">digital thinkers meetup</Link>
+                                    </h5>
+                                    <div className="movie-rating-percent">
+                                    <span>327 Montague Street</span>
+                                    </div>
                                 </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    <div className="article-section">
-                        <div className="section-header-1">
-                        <h2 className="title">sports</h2>
-                        <Link className="view-all" to="sports.html">View All</Link>
-                        </div>
-                        <div className="row mb-30-none justify-content-center">
-                        <div className="col-sm-6 col-lg-4">
-                            <div className="sports-grid">
-                            <div className="movie-thumb c-thumb">
-                                <Link to="#0">
-                                <img src="assets/images/sports/sports01.jpg" alt="sports" />
-                                </Link>
-                                <div className="event-date">
-                                <h6 className="date-title">28</h6>
-                                <span>Dec</span>
-                                </div>
-                            </div>
-                            <div className="movie-content bg-one">
-                                <h5 className="title m-0">
-                                <Link to="#0">football league tournament</Link>
-                                </h5>
-                                <div className="movie-rating-percent">
-                                <span>327 Montague Street</span>
                                 </div>
                             </div>
                             </div>
                         </div>
-                        <div className="col-sm-6 col-lg-4">
-                            <div className="sports-grid">
-                            <div className="movie-thumb c-thumb">
-                                <Link to="#0">
-                                <img src="assets/images/sports/sports02.jpg" alt="sports" />
-                                </Link>
-                                <div className="event-date">
-                                <h6 className="date-title">28</h6>
-                                <span>Dec</span>
+                        <div className="article-section">
+                            <div className="section-header-1">
+                            <h2 className="title">sports</h2>
+                            <Link className="view-all" to="sports.html">View All</Link>
+                            </div>
+                            <div className="row mb-30-none justify-content-center">
+                            <div className="col-sm-6 col-lg-4">
+                                <div className="sports-grid">
+                                <div className="movie-thumb c-thumb">
+                                    <Link to="#0">
+                                    <img src="assets/images/sports/sports01.jpg" alt="sports" />
+                                    </Link>
+                                    <div className="event-date">
+                                    <h6 className="date-title">28</h6>
+                                    <span>Dec</span>
+                                    </div>
+                                </div>
+                                <div className="movie-content bg-one">
+                                    <h5 className="title m-0">
+                                    <Link to="#0">football league tournament</Link>
+                                    </h5>
+                                    <div className="movie-rating-percent">
+                                    <span>327 Montague Street</span>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
-                            <div className="movie-content bg-one">
-                                <h5 className="title m-0">
-                                <Link to="#0">world cricket league 2020</Link>
-                                </h5>
-                                <div className="movie-rating-percent">
-                                <span>327 Montague Street</span>
+                            <div className="col-sm-6 col-lg-4">
+                                <div className="sports-grid">
+                                <div className="movie-thumb c-thumb">
+                                    <Link to="#0">
+                                    <img src="assets/images/sports/sports02.jpg" alt="sports" />
+                                    </Link>
+                                    <div className="event-date">
+                                    <h6 className="date-title">28</h6>
+                                    <span>Dec</span>
+                                    </div>
+                                </div>
+                                <div className="movie-content bg-one">
+                                    <h5 className="title m-0">
+                                    <Link to="#0">world cricket league 2020</Link>
+                                    </h5>
+                                    <div className="movie-rating-percent">
+                                    <span>327 Montague Street</span>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-lg-4">
+                                <div className="sports-grid">
+                                <div className="movie-thumb c-thumb">
+                                    <Link to="#0">
+                                    <img src="assets/images/sports/sports03.jpg" alt="sports" />
+                                    </Link>
+                                    <div className="event-date">
+                                    <h6 className="date-title">28</h6>
+                                    <span>Dec</span>
+                                    </div>
+                                </div>
+                                <div className="movie-content bg-one">
+                                    <h5 className="title m-0">
+                                    <Link to="#0">basket ball tournament 2020</Link>
+                                    </h5>
+                                    <div className="movie-rating-percent">
+                                    <span>327 Montague Street</span>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
                             </div>
                         </div>
-                        <div className="col-sm-6 col-lg-4">
-                            <div className="sports-grid">
-                            <div className="movie-thumb c-thumb">
-                                <Link to="#0">
-                                <img src="assets/images/sports/sports03.jpg" alt="sports" />
-                                </Link>
-                                <div className="event-date">
-                                <h6 className="date-title">28</h6>
-                                <span>Dec</span>
-                                </div>
-                            </div>
-                            <div className="movie-content bg-one">
-                                <h5 className="title m-0">
-                                <Link to="#0">basket ball tournament 2020</Link>
-                                </h5>
-                                <div className="movie-rating-percent">
-                                <span>327 Montague Street</span>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
                     </div>
                 </div>
                 </div>

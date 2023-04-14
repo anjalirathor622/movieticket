@@ -1,5 +1,6 @@
-import './App.css';
+import { createContext } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './App.css';
 import Home from './pages/Home';
 import Layout from './pages/Layout';
 import NoPage from './pages/NoPage';
@@ -15,11 +16,35 @@ import { MovieList } from './pages/MovieList';
 import AboutUs from './pages/AboutUs';
 import Contact from './pages/Contact';
 
+export const initialState = {
+  movies: [
+            {
+                name:'Alone2',
+                image:'http://pixner.net/boleto/demo/assets/images/movie/movie01.jpg'
+            },
+            {
+                name:'Mars2',
+                image:'http://pixner.net/boleto/demo/assets/images/movie/movie02.jpg'
+            },
+            {
+                name:'Venus2',
+                image:'http://pixner.net/boleto/demo/assets/images/movie/movie03.jpg'
+            }
+          ],
+  cart:[]
+}
+//useContext
+export const MovieContext = createContext();
 function App() {
+  //2.1
+ 
+  //2.2
+
+  //2.3
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<MovieContext.Provider value={initialState}><Layout /></MovieContext.Provider>}>
           <Route index element={<Home/>}></Route>
           <Route path="/movie-grid" element={<MovieGrid />}></Route>
           <Route path="/movie-details" element={<MovieDetails />}></Route>
