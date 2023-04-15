@@ -1,7 +1,8 @@
 //import { initialState } from "../../pages/Home";
-import { initialState } from "../../App";
 
-export const reduserFunction = (oldState = initialState, action)=>{
+import { UseContextFunc } from "../../context/usecontext";
+
+export const reduserFunction = (oldState = UseContextFunc(), action)=>{
     //console.log(oldState);
     
     //let newState =  oldState;

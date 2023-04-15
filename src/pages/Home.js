@@ -1,44 +1,28 @@
 //1. Import area
-import React, { useContext, useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { Link } from 'react-router-dom'
 import { REMOVE } from '../reduser/actions/action'
 import { reduserFunction } from '../reduser/reduserFunctions/reduFunc'
-import { MovieContext } from '../App'
-import axios from 'axios'
-import { URL } from '../helper/helper'
+import { UseContextFunc } from '../context/usecontext'
 
-//import { initialState } from '../App'
+
+
+//import { initialState } from '../App's
 
 //2. Defination
 export default function Home() {
     //2.1 Hooks area
-    const [pageLoad, setPageLoad] = useState(false);
-    const initialMovies = useContext(MovieContext)//useConext
-    const [newState , dispatch] = useReducer(reduserFunction, initialMovies) //useReduser
-    const [movieData,setMovieData] = useState()
+   
+    //const [movieData,setMovieData] = useState()
+    //const initialMovies = useContext(MovieContext)//useConext
+    const [newState , dispatch] = useReducer(reduserFunction, UseContextFunc()) //useReduser
 
     //2.2 Function defination
     useEffect(() => {
-        getMovieData()
-    },[pageLoad])
+    
+    },[])
 
-    const getMovieData = ()=>{
-        axios.get(`${URL}/api/movies?populate=*`)
-        .then( (res)=> {
-        // handle success
-        setPageLoad(true)
-        console.log("api_res---->",res.data.data);
-        setMovieData(res.data.data)
-        console.log('movieData====>',movieData)
-        })
-        .catch( (error)=> {
-        // handle error
-        console.log(error);
-        })
-        .finally( ()=> {
-        // always executed
-        });
-    }
+    
     //2.3 return statement
     return (
         <>
@@ -330,19 +314,20 @@ export default function Home() {
                             <div className="row mb-30-none justify-content-center">
                                 
                                 {//console.log('newstate---->',newState)
-                                    movieData && movieData.map((cv,idx,arr)=>{
-                                        console.log(cv.attributes.image_thumb.data)
+                                    newState.movies && newState.movies.map((cv,idx,arr)=>{
+                                        //console.log(cv.attributes.image_thumb.data)
+                                        //URL+cv?.attributes?.image_thumb?.data?.attributes?.url
                                         return(
                                             <div key={idx} className="col-sm-6 col-lg-4">
                                                 <div className="movie-grid">
                                                     <div className="movie-thumb c-thumb">
                                                         <Link to="#0">
-                                                            <img src={URL+cv?.attributes?.image_thumb?.data?.attributes?.url} alt="movie" />
+                                                            <img src={cv.image} alt="movie" />
                                                         </Link>
                                                     </div>
                                                     <div className="movie-content bg-one">
                                                         <h5 className="title m-0">
-                                                            <Link to="#0">{cv?.attributes?.name}</Link>
+                                                            <Link to="#0">{cv?.name}</Link>
                                                         </h5>
                                                         <ul className="movie-rating-percent">
                                                             <li>
@@ -358,9 +343,7 @@ export default function Home() {
                                                                 <span className="content">88%</span>
                                                             </li>
                                                         </ul>
-                                                        {
-                                                        //<button className="btn btn-danger btn-xs" onClick={(e) =>{dispatch({type:REMOVE,mname:cv.name})}}>dlt</button>
-                                                        }
+                                                        <button className="btn btn-danger btn-xs" onClick={(e) =>{dispatch({type:REMOVE,mname:cv.name})}}>dlt</button>
                                                     </div>
                                                 </div>
                                             </div>
