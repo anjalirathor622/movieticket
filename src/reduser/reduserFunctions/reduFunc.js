@@ -1,8 +1,13 @@
 //import { initialState } from "../../pages/Home";
 
+//import { useContext } from "react";
+//import { MovieContext } from "../../App";
+
 //import { UseContextFunc } from "../../context/usecontext";
 
 export const reduserFunction = (oldState , action)=>{
+    //const movies = useContext(MovieContext);
+    //oldState = movies;
     console.log('oldstate===>',oldState);
     
     //let newState =  oldState;

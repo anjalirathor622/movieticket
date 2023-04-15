@@ -18,6 +18,7 @@ export default function Home() {
 
     //2.2 Function defination
     
+    
     //2.3 return statement
     return (
         <>
