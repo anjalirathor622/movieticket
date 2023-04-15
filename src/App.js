@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from './pages/Layout';
@@ -10,44 +10,44 @@ import {URL} from './helper/helper';
 //useContext
 export const MovieContext = createContext();
 function App() {
-  
+  //2.1
   const [initialState,setInitialState] = useState({
-                                                    movies: [
-                                                              {
-                                                                  name:'Alone2',
-                                                                  image:'http://pixner.net/boleto/demo/assets/images/movie/movie01.jpg'
-                                                              },
-                                                              {
-                                                                  name:'Mars2',
-                                                                  image:'http://pixner.net/boleto/demo/assets/images/movie/movie02.jpg'
-                                                              },
-                                                              {
-                                                                  name:'Venus2',
-                                                                  image:'http://pixner.net/boleto/demo/assets/images/movie/movie03.jpg'
-                                                              }
-                                                            ],
+                                                    movies: [],
                                                     cart:[]
                                                   })
-  //2.1
  
   //2.2
-  axios.get(`${URL}/api/movies?populate=*`)
+  useEffect(() => {
+    axios.get(`${URL}/api/movies?populate=*`)
     .then( (res)=> {
-    // handle success
-    console.log("api_res---->",res.data.data);
-    //console.log('movieData====>',movieData)
+      // handle success
+      console.log("api_res---->",res.data.data);
+      setInitialState({
+        ...initialState,
+        movies: [...res.data.data.map((cv,idx)=>{
+          return {
+            name: cv?.attributes?.name,
+            image: URL+cv?.attributes?.image_thumb?.data?.attributes?.url
+          }
+        })
+      ]
     })
-    .catch( (error)=> {
+  })
+  .catch( (error)=> {
     // handle error
     console.log(error);
-    })
-    .finally( ()=> {
+  })
+  .finally( ()=> {
     // always executed
-    });
+  });
+},[])
 
-  //2.3
-  return (
-    <MovieContext.Provider value={initialState}>
+
+
+//2.3
+return (
+  <MovieContext.Provider value={initialState}>
+      {console.log('initialState====>',initialState)}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>

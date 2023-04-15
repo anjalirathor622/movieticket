@@ -1,27 +1,22 @@
 //1. Import area
-import React, { useEffect, useReducer } from 'react'
+import React, { useContext, useReducer } from 'react'
 import { Link } from 'react-router-dom'
 import { REMOVE } from '../reduser/actions/action'
 import { reduserFunction } from '../reduser/reduserFunctions/reduFunc'
-import { UseContextFunc } from '../context/usecontext'
-
-
+import { MovieContext } from '../App'
 
 //import { initialState } from '../App's
 
 //2. Defination
 export default function Home() {
     //2.1 Hooks area
-   
-    //const [movieData,setMovieData] = useState()
-    //const initialMovies = useContext(MovieContext)//useConext
-    const [newState , dispatch] = useReducer(reduserFunction, UseContextFunc()) //useReduser
+
+    const movies = useContext(MovieContext)//useConext
+    //const [movies,setMovies] = useState({});
+    //setMovies(initialMovies)
+    const [newState , dispatch] = useReducer(reduserFunction, movies) //useReduser
 
     //2.2 Function defination
-    useEffect(() => {
-    
-    },[])
-
     
     //2.3 return statement
     return (
@@ -312,11 +307,9 @@ export default function Home() {
                                 <Link className="view-all" to="movie-grid.html">View All</Link>
                             </div>
                             <div className="row mb-30-none justify-content-center">
-                                
-                                {//console.log('newstate---->',newState)
-                                    newState.movies && newState.movies.map((cv,idx,arr)=>{
-                                        //console.log(cv.attributes.image_thumb.data)
-                                        //URL+cv?.attributes?.image_thumb?.data?.attributes?.url
+                                {console.log('newstate---->',newState)}
+                                {
+                                    movies.movies && movies.movies.map((cv,idx,arr)=>{
                                         return(
                                             <div key={idx} className="col-sm-6 col-lg-4">
                                                 <div className="movie-grid">
