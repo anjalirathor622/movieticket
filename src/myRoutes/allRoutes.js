@@ -11,11 +11,13 @@ import NoPage from "../../src/pages/NoPage";
 import Popcorn from "../../src/pages/Popcorn";
 import SignIn from "../../src/pages/SignIn";
 import SignUp from "../../src/pages/SignUp";
+import MovieDetails2 from "../pages/MovieDetails2";
 
 const userRoutes = [
     { path:"/", element:<Home/> },
     { path:"/movie-grid", element:<MovieGrid/> },
     { path:"/movie-details", element:<MovieDetails/> },
+    { path:"/movie-details-2", element:<MovieDetails2/> },
     { path:"/movie-ticket-plan", element:<MovieTicketPlan/> },
     { path:"/movie-seat-plan", element:<MovieSeatPlan/> },
     { path:"/movie-checkout", element:<MovieCheckout/> },

@@ -21,6 +21,9 @@ export default function Navigation() {
                         <Link to="/movie-details">Movie Details</Link>
                     </li>
                     <li>
+                        <Link to="/movie-details-2">Movie Details2</Link>
+                    </li>
+                    <li>
                         <Link to="/movie-ticket-plan">Movie Ticket Plan</Link>
                     </li>
                     <li>
