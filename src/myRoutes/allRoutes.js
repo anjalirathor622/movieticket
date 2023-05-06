@@ -28,7 +28,7 @@ const userRoutes = [
 ]
 
 const authRoutes = [
-    { path:"/sign-in", element:<SignIn/> },
+    { path:"/sign-in/:email/:pass", element:<SignIn/> },
     { path:"/sign-up", element:<SignUp/> },
     { path:"/*", element:<NoPage/> }
 ]

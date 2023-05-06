@@ -3,9 +3,7 @@ import { fetchSignUp } from "./authApi";
 //import SignUp from "../../pages/SignUp";
 
 const initialState= {
-    userInfo: {
-        username:'anjali'
-    },
+    userInfo: {},
     token: "",
 
     loading: false,
@@ -34,13 +32,24 @@ export const authSlice = createSlice({
     builder
         .addCase(signUpAsync.pending,(state)=>{
            // state.status = 'loading';
+           state.loading = true;
+           state.success = false;
         })
+        .addCase(signUpAsync.rejected,(state,action)=>{
+            // state.status = 'loading';
+            state.loading = false;
+            state.success = false;
+            state.error = true;
+         })
         .addCase(signUpAsync.fulfilled,(state,action)=>{
             console.log('state',state)
             console.log('action',action)
             console.log('action.payload',action.payload)
             state.userInfo = action.payload.user;
-            state.token = action.payload.jwt
+            state.token = action.payload.jwt;
+            state.loading = false;
+            state.success = true;
+            state.error = false;
         })
   },
 });
