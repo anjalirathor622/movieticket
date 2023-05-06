@@ -1,20 +1,19 @@
 //1. Import area
-import React, { useContext, useReducer } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { REMOVE } from '../reduser/actions/action'
-import { reduserFunction } from '../reduser/reduserFunctions/reduFunc'
-import { MovieContext } from '../App'
-
+//import { REMOVE } from '../reduser/actions/action'
+//import { reduserFunction } from '../reduser/reduserFunctions/reduFunc'
+//import { MovieContext } from '../App'
 //import { initialState } from '../App's
 
 //2. Defination
 export default function Home() {
     //2.1 Hooks area
-
-    const movies = useContext(MovieContext)//useConext
+    const [movies,setMovies] = useState([])
+    //const movies = useContext(MovieContext)//useConext
     //const [movies,setMovies] = useState({});
     //setMovies(initialMovies)
-    const [newState , dispatch] = useReducer(reduserFunction, movies) //useReduser
+    //const [newState , dispatch] = useReducer(reduserFunction, movies) //useReduser
 
     //2.2 Function defination
     
@@ -308,9 +307,8 @@ export default function Home() {
                                 <Link className="view-all" to="movie-grid.html">View All</Link>
                             </div>
                             <div className="row mb-30-none justify-content-center">
-                                {console.log('newstate---->',newState)}
                                 {
-                                    movies.movies && movies.movies.map((cv,idx,arr)=>{
+                                    movies && movies.map((cv,idx,arr)=>{
                                         return(
                                             <div key={idx} className="col-sm-6 col-lg-4">
                                                 <div className="movie-grid">
@@ -337,7 +335,6 @@ export default function Home() {
                                                                 <span className="content">88%</span>
                                                             </li>
                                                         </ul>
-                                                        <button className="btn btn-danger btn-xs" onClick={(e) =>{dispatch({type:REMOVE,mname:cv.name})}}>dlt</button>
                                                     </div>
                                                 </div>
                                             </div>
