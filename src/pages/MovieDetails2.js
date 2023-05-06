@@ -14,9 +14,7 @@ class MovieDetails2 extends Component {
 
 
     //1.2 constructor
-    constructor() {
-        super(); //always have to call super constructor
-    }
+    
 
     //1.3 methods
     render() {

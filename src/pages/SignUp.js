@@ -1,8 +1,9 @@
 //import area
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
-import { selectUserInfo } from '../features/auth/authSlice';
+import { selectUserInfo, signUpAsync } from '../features/auth/authSlice';
+import swal from 'sweetalert';
 
 //defination area
 function SignUp() {
@@ -13,11 +14,12 @@ function SignUp() {
                                             "password": null
                                         })
     let userInfo = useSelector(selectUserInfo);
+    const dispatch = useDispatch();
 
     //defination
     let handleChange = (e)=>{
         //alert('okokok')
-        console.log('e.target.name====>',e.target.name)
+        //console.log('e.target.name====>',e.target.name)
         console.log('e.target.value====>',e.target.value)
         setPayload({
             ...payload,
@@ -26,14 +28,23 @@ function SignUp() {
     }
     let submitData = ()=>{
         //alert('okokok')
-        console.log('to be submitted====>',payload)
+        console.log('to be submitted====>',payload);
+        if(payload.password === payload.cpassword){
+            delete payload.cpassword;
+            console.log('ready to submitted====>',payload)
+
+            dispatch(signUpAsync(payload))
+        }else{
+            swal("Try Again!", "password & confirm password doesn't match!!!", "error");
+            //alert("password & confirm password doesn't match")
+        }
     }
 
 
     //return 
     return (
         <>
-            {console.log('user info----->',userInfo.userInfo.username)}
+            {console.log('user info----->',userInfo)}
             {console.log('payload===>',payload)}
             <section className="account-section bg_img" data-background="assets/images/account/account-bg.jpg">
                 <div className="container">
@@ -41,7 +52,7 @@ function SignUp() {
                     <div className="account-area">
                         <div className="section-header-3">
                         <span className="cate">welcome</span>
-                        <h2 className="title">to Boleto </h2>
+                        <h2 className="title">to <Link to="/">Boleto</Link> </h2>
                         </div>
                         <form className="account-form">
                         <div className="form-group">
@@ -65,7 +76,7 @@ function SignUp() {
                             <label htmlFor="bal">I agree to the <Link to="#0">Terms, Privacy Policy</Link> and <Link to="#0">Fees</Link></label>
                         </div>
                         <div className="form-group text-center">
-                            <input type="button" className='bg-primary' defaultValue="Sign Up" onClick={submitData()} />
+                            <input type="button" className='bg-primary' defaultValue="Sign Up" onClick={submitData} />
                         </div>
                         </form>
                         <div className="option">
