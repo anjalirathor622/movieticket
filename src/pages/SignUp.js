@@ -11,7 +11,7 @@ function SignUp() {
                                             "username": null,
                                             "email": null,
                                             "password": null
-                                            })
+                                        })
     let userInfo = useSelector(selectUserInfo);
 
     //defination
