@@ -15,17 +15,18 @@ function SignUp() {
     let userInfo = useSelector(selectUserInfo);
 
     //defination
-    let submitData = ()=>{
-        //alert('okokok')
-    }
     let handleChange = (e)=>{
         //alert('okokok')
         console.log('e.target.name====>',e.target.name)
         console.log('e.target.value====>',e.target.value)
         setPayload({
-                    ...payload,
-                    [e.target.name]:e.target.value
-                })
+            ...payload,
+            [e.target.name]:e.target.value
+        })
+    }
+    let submitData = ()=>{
+        //alert('okokok')
+        console.log('to be submitted====>',payload)
     }
 
 
